@@ -11,7 +11,6 @@
 gem_group :test, :development do
   # テストにはrspec, capybara, factory_girlを使用します
   gem 'rspec-rails'
-  gem 'capybara'
   gem 'factory_girl_rails'
 end
 
@@ -34,7 +33,7 @@ uncomment_lines "Gemfile", "gem 'therubyracer'"
 #
 # Bundle install
 #
-run "bundle install"
+run_bundle
 
 #
 # Files and Directories
@@ -49,13 +48,13 @@ remove_file "app/views/layouts/application.html.erb"
 # generate時にrspecを自動生成するように修正
 application <<-APPEND_APPLICATION
 config.generators do |generate|
-      generate.test_framework   :rspec, fixture: ture, views: false
+      generate.test_framework   :rspec, fixture: true, views: false
       generate.integration_tool :rspec, fixture: true, views: true
     end
 APPEND_APPLICATION
 
 # assetsがうるさいので黙らせる
-initializer "quiet_assets.rb" <<-CODE
+initializer "quiet_assets", <<-CODE
 Rails.application.assets.logger = Logger.new(File::NULL)
 Rails::Rack::Logger.class_eval do
   def call_with_quiet_assets(env)
@@ -106,3 +105,4 @@ route "root to: 'dashboard#show'"
 git :init
 git add: "."
 git commit: "-am 'Initial commit'"
+
