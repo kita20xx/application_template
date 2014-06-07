@@ -25,6 +25,15 @@ end
 gem 'less-rails'
 gem 'twitter-bootstrap-rails', git: 'https://github.com/seyhunak/twitter-bootstrap-rails.git', branch: 'bootstrap3'
 
+# Web Browserはthinを使用します
+gem 'thin'
+
+# Strong Parametersで弾かれてるログに色をつける
+gem 'colorize_unpermitted_parameters'
+
+# quiet_assetsのgemがあった
+gem 'quiet_assets', :group => :development
+
 # Gemfileの指定行をコメント
 comment_lines "Gemfile", "gem 'sqlite3'"
 # Gemfileの指定行のコメントを外す
@@ -52,21 +61,6 @@ config.generators do |generate|
       generate.integration_tool :rspec, fixture: true, views: true
     end
 APPEND_APPLICATION
-
-# assetsがうるさいので黙らせる
-initializer "quiet_assets.rb", <<-CODE
-Rails.application.assets.logger = Logger.new(File::NULL)
-Rails::Rack::Logger.class_eval do
-  def call_with_quiet_assets(env)
-    previous_level = Rails.logger.level
-    Rails.logger.level = Logger::ERROR if env['PATH_INFO'].index("/assets/") == 0
-    call_without_quiet_assets(env).tap do
-      Rails.logger.level = previous_level
-    end
-  end
-  alias_method_chain :call, :quiet_assets
-end
-CODE
 
 #
 # Generators
