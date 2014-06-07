@@ -9,7 +9,7 @@
 # Gemfileにgemを追加
 #
 gem_group :test, :development do
-  # テストにはrspec, capybara, factory_girlを使用します
+  # テストにはrspec, factory_girlを使用します
   gem 'rspec-rails'
   gem 'factory_girl_rails'
 end
@@ -54,7 +54,7 @@ config.generators do |generate|
 APPEND_APPLICATION
 
 # assetsがうるさいので黙らせる
-initializer "quiet_assets", <<-CODE
+initializer "quiet_assets.rb", <<-CODE
 Rails.application.assets.logger = Logger.new(File::NULL)
 Rails::Rack::Logger.class_eval do
   def call_with_quiet_assets(env)
@@ -105,4 +105,3 @@ route "root to: 'dashboard#show'"
 git :init
 git add: "."
 git commit: "-am 'Initial commit'"
-
